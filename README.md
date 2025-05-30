@@ -1,0 +1,73 @@
+# Setup Kubernetes in Datacentre (VPS or Bare Metal)
+
+Helps to autosetup a VPS with Kubernetes to run applications more reliably.
+Intended for porting the installation from one cloud provider to another and automating the whole setup.
+
+## Setup
+
+Add your SSH public key to the `authorized_keys` file on the VPS (Optional).
+
+Create a dotenv file with environment variables as secrets:
+
+```dotenv
+MAIN_NODE_IP=<your_vps_ip>
+MAIN_NODE_SSH_PORT=<your_vps_ssh_port>
+```
+
+To install docker and kubernetes:
+
+```bash
+chmod +x install.sh
+./install.sh docker
+./install.sh kubernetes
+sudo reboot
+```
+
+Ensure `cri-dockerd` (which is installed with docker install sequence) is working correctly before proceeding with Kubernetes setup.
+Currently the version of `cri-dockerd` is not pinned, so it may change in the future. If you encounter issues, please check the [cri-dockerd repository](https://github.com/Mirantis/cri-dockerd.git). 
+
+After installing Kubernetes, setup the cluster:
+
+To export credentials: 
+```bash
+export KUBECONFIG=/etc/kubernetes/admin.conf
+```
+
+1) Remove node taint to allow scheduling of pods in the control plane node, if necessary (especially for single-node clusters):
+```bash
+kubectl taint nodes <node-name> node-role.kubernetes.io/control-plane:NoSchedule-
+```
+
+2) Install the Calico CNI plugin for networking:
+```bash
+kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+```
+
+3) Add default tools like kubernetes dashboard, ingress controller etc.
+
+```bash
+skaffold run
+```
+
+4) Adding nodes to the cluster (untested):
+```bash
+kubeadm token create --print-join-command
+```
+and run the command on the new node to join it to the cluster.
+
+##### Changing SSH port
+
+Goto: 
+```
+nano /etc/ssh/sshd_config
+```
+and uncomment the port line and change it to your desired port, e.g. `Port 2222`.
+
+
+
+
+
+
+
+
+

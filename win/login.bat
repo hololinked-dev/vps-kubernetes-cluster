@@ -1,0 +1,2 @@
+ssh root@%MAIN_NODE_IP% -p %MAIN_NODE_SSH_PORT%
+PAUSE

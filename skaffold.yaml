@@ -1,0 +1,88 @@
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: external-IP
+deploy:
+  # dont forget to export the kube context
+  helm:
+    releases:
+    - name: ingress-nginx
+      repo: https://kubernetes.github.io/ingress-nginx
+      remoteChart: ingress-nginx
+      version: 4.11.2
+      setValues:
+        controller:
+          service:
+            type: LoadBalancer
+            externalTrafficPolicy: Local
+          ingressClassResource:
+            enabled: true
+            name: nginx
+      setValueTemplates:
+        controller.service.externalIPs: 
+          - "{{ .MAIN_NODE_IP }}"
+        controller.ingressClassResource.controllerValue: "{{ .TOP_LEVEL_DOMAIN/ingress-nginx }}"
+      namespace: default
+      wait: true
+
+
+---
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: domain-tools
+deploy:
+  # dont forget to export the kube context
+  helm:
+    releases:
+    - name: cert-manager
+      repo: https://charts.jetstack.io
+      remoteChart: cert-manager
+      version: "v1.17.0"
+      namespace: cert-manager
+      createNamespace: true
+      setValues:
+        crds:
+          enabled: true
+
+    - name: cluster-issuer
+      chartPath: manifests/helm/cert-issuer
+      namespace: default
+      setValues:
+        enabled: true
+      setValueTemplates:
+        email: "{{ .ADMIN_EMAIL }}"
+      dependsOn: ["cert-manager"]
+
+      
+--- 
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: common-tools
+deploy:
+  # dont forget to export the kube context
+  helm:
+    releases:
+    - name: kubernetes-dashboard
+      repo: https://kubernetes.github.io/dashboard
+      remoteChart: kubernetes-dashboard  
+      version: 7.13.0
+      namespace: tools
+      createNamespace: true
+       
+    - name: ingress
+      chartPath: manifests/helm/ingress
+      valuesFiles:
+        - manifests/helm/ingress/values.yaml
+        - manifests/helm/ingress/values-kubernetes-web-dashboard.yaml
+      setValueTemplates:
+        tls[0].hosts[0]: cluster."{{ .TOP_LEVEL_DOMAIN }}"
+        rules[0].host: cluster."{{ .TOP_LEVEL_DOMAIN }}"
+        tls[0].secretName: "{{ .TOP_LEVEL_DOMAIN | replace "." "-" }}-tls"
+      namespace: tools
+      dependsOn: ["ingress-nginx"]
+
+
+
+       
