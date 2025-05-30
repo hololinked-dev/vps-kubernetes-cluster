@@ -1,0 +1,3 @@
+[submodule "cluster/manifests/helm/plausible-analytics"]
+	path = cluster/manifests/helm/plausible-analytics
+	url = https://github.com/IMIO/helm-plausible-analytics.git

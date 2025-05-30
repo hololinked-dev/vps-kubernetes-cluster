@@ -54,12 +54,12 @@ deploy:
         email: "{{ .ADMIN_EMAIL }}"
       dependsOn: ["cert-manager"]
 
-      
+
 --- 
 apiVersion: skaffold/v4beta13
 kind: Config
 metadata:
-  name: common-tools
+  name: kubernetes-dashboard
 deploy:
   # dont forget to export the kube context
   helm:
@@ -70,18 +70,49 @@ deploy:
       version: 7.13.0
       namespace: tools
       createNamespace: true
-       
-    - name: ingress
-      chartPath: manifests/helm/ingress
-      valuesFiles:
-        - manifests/helm/ingress/values.yaml
-        - manifests/helm/ingress/values-kubernetes-web-dashboard.yaml
+      setValues:
+        app:
+          ingress:
+            enabled: true
+            ingressClassName: nginx
+            issuer:
+              name: letsencrypt-prod
+              scope: cluster
+            tls:
+              enabled: true
+              secretName: kubernetes-dashboard-tls
       setValueTemplates:
-        tls[0].hosts[0]: cluster."{{ .TOP_LEVEL_DOMAIN }}"
-        rules[0].host: cluster."{{ .TOP_LEVEL_DOMAIN }}"
-        tls[0].secretName: "{{ .TOP_LEVEL_DOMAIN | replace "." "-" }}-tls"
+        app.ingress.hosts:
+          - "{{ printf \"cluster.%s\" .TOP_LEVEL_DOMAIN }}"
+
+
+---
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: plausible-analytics
+deploy:
+  helm:
+    releases:
+    - name: plausible-analytics
+      chartPath: manifests/helm/plausible-analytics
       namespace: tools
-      dependsOn: ["ingress-nginx"]
+      createNamespace: true
+      setValues:     
+        ingress:
+          enabled: true
+          className: nginx
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt-prod
+      setValueTemplates:
+        tls:
+          hosts:
+          - plausible.{{ .TOP_LEVEL_DOMAIN }}
+          secretName: plausible-analytics-tls
+        postgresql.auth.password: "{{ .PLAUSIBLE_PASSWORD }}"
+        databaseURL: "postgresql://plausible:{{ .PLAUSIBLE_PASSWORD }}@plausible-analytics-postgresql.tools.svc.cluster.local:5432/plausible"
+        clickhouse.auth.password: "{{ .PLAUSIBLE_CLICKHOUSE_PASSWORD }}"
+        clickhouseURL: "http://clickhouse:{{ .PLAUSIBLE_PASSWORD }}@plausible-analytics-clickhouse.tools.svc.cluster.local:8123/plausible_events_db"
 
 
 

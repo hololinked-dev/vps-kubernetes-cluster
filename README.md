@@ -1,7 +1,18 @@
-# Setup Kubernetes in Datacentre (VPS or Bare Metal)
+# Custom Setup Kubernetes in a Datacentre (VPS or Bare Metal)
 
-Helps to autosetup a VPS with Kubernetes to run applications more reliably.
-Intended for porting the installation from one cloud provider to another and automating the whole setup.
+Template repository that helps to autosetup VPS(-es) or nodes with Kubernetes.
+Intended for porting the installation from one cloud provider to another and automating the whole setup while doing so.
+
+The following components are installed to get started with fullstack applications faster:
+- public facing load balancer
+- kubernetes dashboard
+- letsencrypt for SSL certificates
+- plausible analytics (with databases)
+- email server (mailcow)
+- authentication manager (keycloak)
+- database (postgres or mongo)
+- helm charts for deploying applications
+- skaffold for local development with file sync and deployment
 
 ## Setup
 
@@ -10,8 +21,14 @@ Add your SSH public key to the `authorized_keys` file on the VPS (Optional).
 Create a dotenv file with environment variables as secrets:
 
 ```dotenv
-MAIN_NODE_IP=<your_vps_ip>
-MAIN_NODE_SSH_PORT=<your_vps_ssh_port>
+MAIN_NODE_IP=<your vps ip>
+MAIN_NODE_SSH_PORT=<your vps ssh port>
+TOP_LEVEL_DOMAIN=<your domain example.com>
+ADMIN_EMAIL=<your admin email >
+PLAUSIBLE_PASSWORD=<your plausible password>
+MAILCOW_ADMIN_PASSWORD=<your mailcow admin password>
+KEYCLOAK_ADMIN_PASSWORD=<your keycloak admin password>
+POSTGRES_PASSWORD=<your postgres password>
 ```
 
 To install docker and kubernetes:
@@ -55,13 +72,16 @@ kubeadm token create --print-join-command
 ```
 and run the command on the new node to join it to the cluster.
 
-##### Changing SSH port
+## Nodes Setup
+
+#### Changing SSH port
 
 Goto: 
 ```
 nano /etc/ssh/sshd_config
 ```
 and uncomment the port line and change it to your desired port, e.g. `Port 2222`.
+
 
 
 
