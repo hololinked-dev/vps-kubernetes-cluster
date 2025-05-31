@@ -1,0 +1,16 @@
+tls:
+  hosts:
+  - control-panel.hololinked.dev
+  secretName: control-panel-hololinked-tls
+
+rules:
+- host: control-panel.hololinked.dev
+  http:
+    paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: control-panel
+            port:
+              number: 80

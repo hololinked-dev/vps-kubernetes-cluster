@@ -1,0 +1,26 @@
+annotations:
+  cert-manager.io/cluster-issuer: letsencrypt-prod
+ 
+tls:
+  - hosts:
+    - examples-new.hololinked.dev
+    secretName: examples-new-hololinked-dev-tls
+
+rules:
+- host: examples-new.hololinked.dev
+  http:
+    paths:
+      - path: /simulations/oscilloscope
+        pathType: Prefix
+        backend:
+          service:
+            name: oscilloscope-simulator
+            port:
+              number: 80
+      - path: /simulators/spectrometer
+        pathType: Prefix
+        backend:
+          service:
+            name: spectrometer-simulator
+            port:
+              number: 80
