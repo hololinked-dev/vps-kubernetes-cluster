@@ -45,11 +45,25 @@ deploy:
         crds:
           enabled: true
 
-    - name: cluster-issuer
-      chartPath: manifests/helm/cert-issuer
+    - name: cluster-issuer-prod
+      chartPath: cluster/manifests/helm/cert-issuer
       namespace: default
       setValues:
+        nameOverride: cluster-issuer-prod
+        fullnameOverride: cluster-issuer-prod
         enabled: true
+      setValueTemplates:
+        email: "{{ .ADMIN_EMAIL }}"
+      dependsOn: ["cert-manager"]
+    
+    - name: cluster-issuer-staging
+      chartPath: cluster/manifests/helm/cert-issuer
+      namespace: default
+      setValues:
+        nameOverride: cluster-issuer-staging
+        fullnameOverride: cluster-issuer-staging
+        enabled: true
+        environment: test
       setValueTemplates:
         email: "{{ .ADMIN_EMAIL }}"
       dependsOn: ["cert-manager"]
