@@ -43,6 +43,13 @@ spec:
             - name: http
               containerPort: {{ .Values.image.ports.containerPort }}
               protocol: TCP
+          {{- if .Values.env }}
+          env: 
+          {{- range .Values.env }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+          {{- end }}
+          {{- end }}
           {{- with .Values.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}
