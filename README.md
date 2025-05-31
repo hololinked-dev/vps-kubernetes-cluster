@@ -1,4 +1,4 @@
-# Custom Setup Kubernetes in a Datacentre (VPS or Bare Metal)
+# Self Managed Kubernetes in a Datacentre (VPS or Bare Metal)
 
 Template repository that helps to autosetup VPS(-es) or nodes with Kubernetes.
 Intended for porting the installation from one cloud provider to another and automating the whole setup while doing so.

@@ -1,0 +1,19 @@
+annotations:
+  cert-manager.io/cluster-issuer: letsencrypt-test
+ 
+tls:
+  - hosts:
+    - hololinked.dev
+    secretName: hololinked-dev-tls
+
+rules:
+- host: hololinked.dev
+  http:
+    paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: website
+            port:
+              number: 80

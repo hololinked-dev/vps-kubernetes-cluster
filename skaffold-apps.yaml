@@ -55,6 +55,26 @@ deploy:
 apiVersion: skaffold/v4beta13
 kind: Config
 metadata:
+  name: control-panel
+deploy:
+  helm:
+    releases:
+    - name: control-panel
+      chartPath: cluster/manifests/helm/apps
+      namespace: control-panel
+      createNamespace: true
+      setValues:
+        nameOverride: control-panel
+        image:
+          repository: ghcr.io/hololinked-dev/thing-control-panel
+          pullPolicy: Always
+          tag: master
+
+        
+---
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
   name: simulators-ingress
 deploy:
   helm:
@@ -67,3 +87,79 @@ deploy:
         - cluster/manifests/helm/ingress-custom-routes/values-simulators.yaml
       setValues:
         nameOverride: simulators-ingress
+
+
+---
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: control-panel-ingress
+deploy:
+  helm:
+    releases:
+    - name: control-panel-ingress
+      chartPath: cluster/manifests/helm/ingress
+      namespace: control-panel
+      valuesFiles:
+        - cluster/manifests/helm/ingress/values.yaml
+        - cluster/manifests/helm/ingress-custom-routes/values-control-panel.yaml
+      setValues:
+        nameOverride: control-panel-ingress
+
+
+---
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: website
+deploy:
+  helm:
+    releases:
+    - name: website
+      chartPath: cluster/manifests/helm/apps
+      namespace: website
+      createNamespace: true
+      setValues:
+        nameOverride: website
+        image:
+          repository: ghcr.io/hololinked-dev/frontend
+          pullPolicy: Always
+          tag: main
+  
+
+---
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: website-ingress
+deploy:
+  helm:
+    releases:
+    - name: website-ingress
+      chartPath: cluster/manifests/helm/ingress
+      namespace: website
+      valuesFiles:
+        - cluster/manifests/helm/ingress/values.yaml
+        - cluster/manifests/helm/ingress-custom-routes/values-website.yaml
+      setValues:
+        nameOverride: website-ingress
+
+
+---
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: staging-websites
+deploy:
+  helm:
+    releases:
+    - name: docs
+      chartPath: cluster/manifests/helm/apps
+      namespace: website
+      createNamespace: true
+      setValues:
+        nameOverride: docs
+        image:
+          repository: ghcr.io/hololinked-dev/docs
+          pullPolicy: Always
+          tag: main
