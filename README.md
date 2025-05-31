@@ -1,17 +1,18 @@
 # Self Managed Kubernetes in a Datacentre (VPS or Bare Metal)
 
 Template repository that helps to autosetup VPS(-es) or nodes with Kubernetes.
-Intended for porting the installation from one cloud provider to another and automating the whole setup while doing so.
+Intended for porting the installation from one cloud provider to another, getting started with fullstack applications faster and automating the whole setup while doing so.
 
-The following components are installed to get started with fullstack applications faster:
+The following components can be installed:
 - public facing load balancer
 - kubernetes dashboard
 - letsencrypt for SSL certificates
 - plausible analytics (with databases)
 - email server (mailcow)
-- authentication manager (keycloak)
-- database (postgres or mongo)
-- helm charts for deploying applications
+- authentication manager (keycloak) (TODO)
+- database (postgres or mongo) (TODO)
+- docker registry (harbor) (TODO)
+- helm charts for deploying custom applications by modifying image name, tags and environment variables
 - skaffold for local development with file sync and deployment
 
 ## Setup
@@ -60,7 +61,7 @@ kubectl taint nodes <node-name> node-role.kubernetes.io/control-plane:NoSchedule
 kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
 ```
 
-3) Add default tools like kubernetes dashboard, ingress controller etc.
+3) To install all tools at once:
 
 ```bash
 skaffold run

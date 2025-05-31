@@ -13,7 +13,6 @@ deploy:
         nameOverride: oscilloscope-simulator
         image:
           repository: ghcr.io/vigneshvsv/oscilloscope-simulator
-          pullPolicy: Always
           tag: main
           ports:
             containerPort: 5000
@@ -40,7 +39,6 @@ deploy:
         nameOverride: spectrometer-simulator
         image:
           repository: ghcr.io/vigneshvsv/spectrometer-simulator
-          pullPolicy: Always
           tag: main
           ports:
             containerPort: 5000
@@ -67,7 +65,6 @@ deploy:
         nameOverride: control-panel
         image:
           repository: ghcr.io/hololinked-dev/thing-control-panel
-          pullPolicy: Always
           tag: master
 
         
@@ -115,15 +112,14 @@ metadata:
 deploy:
   helm:
     releases:
-    - name: website
+    - name: frontend
       chartPath: cluster/manifests/helm/apps
       namespace: website
       createNamespace: true
       setValues:
-        nameOverride: website
+        nameOverride: frontend
         image:
-          repository: ghcr.io/hololinked-dev/frontend
-          pullPolicy: Always
+          repository: ghcr.io/hololinked-dev/website/frontend
           tag: main
   
 
@@ -161,5 +157,4 @@ deploy:
         nameOverride: docs
         image:
           repository: ghcr.io/hololinked-dev/docs
-          pullPolicy: Always
           tag: main

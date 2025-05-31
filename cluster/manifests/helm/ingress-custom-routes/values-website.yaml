@@ -1,5 +1,5 @@
 annotations:
-  cert-manager.io/cluster-issuer: letsencrypt-test
+  cert-manager.io/cluster-issuer: letsencrypt-prod
  
 tls:
   - hosts:
@@ -14,6 +14,6 @@ rules:
         pathType: Prefix
         backend:
           service:
-            name: website
+            name: frontend
             port:
               number: 80
