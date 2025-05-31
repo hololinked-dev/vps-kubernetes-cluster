@@ -3,38 +3,7 @@ fullnameOverride: ""
 
 enabled: true
 environment: test
-
 className: nginx
 
 annotations:
-  cert-manager.io/cluster-issuer: letsencrypt-prod
-
-# tls:
-#   - hosts:
-#     # - example.com
-#     # - control-panel.example.com
-#     - cluster.example.com
-#     secretName: hololinked-tls
-
-# rules:
-# - host: example.com
-#   http:
-#     paths:
-#       - path: /
-#         pathType: Prefix
-#         backend:
-#           service:
-#             name: website
-#             port:
-#               number: 80
-
-# - host: control-panel.example.com
-#   http:
-#     paths:
-#       - path: /
-#         pathType: Prefix
-#         backend:
-#           service:
-#             name: control-panel-ssl
-#             port:
-#               number: 80
+  cert-manager.io/cluster-issuer: letsencrypt-test
