@@ -53,6 +53,54 @@ deploy:
 apiVersion: skaffold/v4beta13
 kind: Config
 metadata:
+  name: node-wot-advanced-coffee-machine-simulator
+deploy:
+  helm:
+    releases:
+    - name: node-wot-advanced-coffee-machine-simulator
+      chartPath: cluster/manifests/helm/apps
+      namespace: simulators
+      createNamespace: true
+      setValues:
+        nameOverride: node-wot-advanced-coffee-machine-simulator
+        image:
+          repository: docker.io/vigneshvsv/node-wot-advanced-coffee-machine
+          tag: latest
+          ports:
+            containerPort: 3000
+        env:
+        - name: HOSTNAME
+          value: external-examples-new.hololinked.dev
+
+
+---
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: node-wot-http-data-schema-thing-simulator
+deploy:
+  helm:
+    releases:
+    - name: node-wot-http-data-schema-thing-simulator
+      chartPath: cluster/manifests/helm/apps
+      namespace: simulators
+      createNamespace: true
+      setValues:
+        nameOverride: node-wot-http-data-schema-thing-simulator
+        image:
+          repository: docker.io/vigneshvsv/node-wot-http-data-schema-thing
+          tag: latest
+          ports:
+            containerPort: 3000
+        env:
+        - name: HOSTNAME
+          value: external-examples-new.hololinked.dev
+      
+
+---
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
   name: control-panel
 deploy:
   helm:

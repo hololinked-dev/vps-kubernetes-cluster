@@ -4,6 +4,7 @@ annotations:
 tls:
   - hosts:
     - examples-new.hololinked.dev
+    - external-examples-new.hololinked.dev
     secretName: examples-new-hololinked-dev-tls
 
 rules:
@@ -22,5 +23,23 @@ rules:
         backend:
           service:
             name: spectrometer-simulator
+            port:
+              number: 80
+
+- host: external-examples-new.hololinked.dev
+  http:
+    paths:
+      - path: /advanced-coffee-machine
+        pathType: Prefix
+        backend:
+          service:
+            name: node-wot-advanced-coffee-machine-simulator
+            port:
+              number: 80
+      - path: /data-schema-thing 
+        pathType: Prefix
+        backend:
+          service:
+            name: node-wot-http-data-schema-thing-simulator
             port:
               number: 80

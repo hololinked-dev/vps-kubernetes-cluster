@@ -115,13 +115,15 @@ deploy:
       setValues:     
         ingress:
           enabled: true
-          className: nginx            
+          className: nginx         
+          annotations:
+            cert-manager\.io/cluster-issuer: letsencrypt-prod           
       setValueTemplates:
-        tls:
-          hosts:
-          - "{{ printf \"plausible.%s\" .TOP_LEVEL_DOMAIN }}"
-          secretName: plausible-analytics-tls
         ingress:
+          tls:
+            - hosts:
+              - "{{ printf \"plausible.%s\" .TOP_LEVEL_DOMAIN }}"
+              secretName: plausible-analytics-tls
           hosts:
           - "{{ printf \"plausible.%s\" .TOP_LEVEL_DOMAIN }}"
         # postgresql.auth.password: "{{ .PLAUSIBLE_PASSWORD }}"
@@ -130,30 +132,30 @@ deploy:
         # clickhouseDatabaseURL: "{{ printf \"http://clickhouse:%s@plausible-analytics-clickhouse.tools.svc.cluster.local:8123/plausible_events_db\" .PLAUSIBLE_PASSWORD }}"
 
 
-# ---
-# apiVersion: skaffold/v4beta13
-# kind: Config
-# metadata:
-#   name: docker-registry
-# deploy:
-#   helm:
-#     releases:
-#     - name: harbor-docker-registry
-#       remoteChart: oci://registry-1.docker.io/bitnamicharts/harbor
-#       version: 2.13.1
-#       namespace: tools
-#       createNamespace: true
-#       setValues:
-#         ingress.core.className: nginx
-#       setValueTemplates:
-#         externalURL: "{{ printf \"https://registry.%s\" .TOP_LEVEL_DOMAIN }}"
-#         adminPassword: "{{ .HARBOR_ADMIN_PASSWORD }}"
-#         ingress.core.hostname: "{{ printf \"registry.%s\" .TOP_LEVEL_DOMAIN }}"
-#         ingress.core.tls:
-#           enabled: true
-#           secretName: harbor-docker-registry-tls
-     
-        
+---
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: docker-registry
+deploy:
+  helm:
+    releases:
+    - name: harbor-docker-registry
+      remoteChart: oci://registry-1.docker.io/bitnamicharts/harbor
+      version: 26.6.1
+      namespace: tools
+      createNamespace: true
+      setValues:
+        exposureType: ingress
+        ingress.core.className: nginx
+        ingress.core.tls: true
+        persistence.persistentVolumeClaim.registry.size: 10Gi
+      setValueTemplates:
+        externalURL: "{{ printf \"https://container-registry.%s\" .TOP_LEVEL_DOMAIN }}"
+        adminPassword: "{{ .HARBOR_ADMIN_PASSWORD }}"
+        ingress.core.hostname: "{{ printf \"container-registry.%s\" .TOP_LEVEL_DOMAIN }}"
+        ingress.core.annotations:
+          cert-manager\.io/cluster-issuer: letsencrypt-test
 
 
        
