@@ -10,4 +10,4 @@ helm --kube-context kubernetes-admin@kubernetes \
   --set controller.service.externalTrafficPolicy=Local \
   --set controller.service.type=NodePort \
   --set controller.ingressClassResource.name=nginx \
-  --set controller.ingressClassResource.controllerValue=hololinked.dev/ingress-nginx
+  --set controller.ingressClassResource.controllerValue=${TOP_LEVEL_DOMAIN}/ingress-nginx
