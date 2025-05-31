@@ -1,0 +1,69 @@
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: oscilloscope-simulator
+deploy:
+  helm:
+    releases:
+    - name: oscilloscope-simulator
+      chartPath: cluster/manifests/helm/apps
+      namespace: simulators
+      createNamespace: true
+      setValues:
+        nameOverride: oscilloscope-simulator
+        image:
+          repository: ghcr.io/vigneshvsv/oscilloscope-simulator
+          pullPolicy: Always
+          tag: main
+          ports:
+            containerPort: 5000
+        env:
+        - name: hostname
+          value: examples-new.hololinked.dev
+        - name: ssl_used
+          value: "true"
+  
+
+---
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: spectrometer-simulator
+deploy:
+  helm:
+    releases:
+    - name: spectrometer-simulator
+      chartPath: cluster/manifests/helm/apps
+      namespace: simulators
+      createNamespace: true
+      setValues:
+        nameOverride: spectrometer-simulator
+        image:
+          repository: ghcr.io/vigneshvsv/spectrometer-simulator
+          pullPolicy: Always
+          tag: main
+          ports:
+            containerPort: 5000
+        env:
+        - name: hostname
+          value: examples-new.hololinked.dev
+        - name: ssl_used
+          value: "true"
+
+
+---
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: simulators-ingress
+deploy:
+  helm:
+    releases:
+    - name: simulators-ingress
+      chartPath: cluster/manifests/helm/ingress
+      namespace: simulators
+      valuesFiles:
+        - cluster/manifests/helm/ingress/values.yaml
+        - cluster/manifests/helm/ingress-custom-routes/values-simulators.yaml
+      setValues:
+        nameOverride: simulators-ingress
