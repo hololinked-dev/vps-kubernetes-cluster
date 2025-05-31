@@ -51,6 +51,11 @@ else if [ "$1" = "kubernetes" ]; then
   curl -s https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 -o skaffold
   sudo install skaffold /usr/local/bin/
 
+  wget https://github.com/derailed/k9s/releases/download/v0.50.6/k9s_linux_amd64.deb
+  # update version number when new release is available - https://github.com/derailed/k9s/releases
+  sudo dpkg -i k9s_linux_amd64.deb
+  rm k9s_linux_amd64.deb
+
 else if [ "$1" = "mailcow" ]; then
 
   # Mailcow installation:
@@ -63,4 +68,5 @@ else if [ "$1" = "mailcow" ]; then
   sudo docker-compose up -d
   echo "Mailcow installation complete. Make sure to add DNS records as specified here: https://docs.mailcow.email/getstarted/prerequisite-dns/#the-minimal-dns-configuration"
   cd ~/
+
 fi

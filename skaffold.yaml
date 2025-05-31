@@ -95,24 +95,26 @@ deploy:
   helm:
     releases:
     - name: plausible-analytics
-      chartPath: manifests/helm/plausible-analytics
+      chartPath: cluster/manifests/helm/plausible-analytics
       namespace: tools
       createNamespace: true
       setValues:     
         ingress:
           enabled: true
-          className: nginx
-          annotations:
-            cert-manager.io/cluster-issuer: letsencrypt-prod
+          className: nginx            
       setValueTemplates:
         tls:
           hosts:
-          - plausible.{{ .TOP_LEVEL_DOMAIN }}
+          - "{{ printf \"plausible.%s\" .TOP_LEVEL_DOMAIN }}"
           secretName: plausible-analytics-tls
-        postgresql.auth.password: "{{ .PLAUSIBLE_PASSWORD }}"
-        databaseURL: "postgresql://plausible:{{ .PLAUSIBLE_PASSWORD }}@plausible-analytics-postgresql.tools.svc.cluster.local:5432/plausible"
-        clickhouse.auth.password: "{{ .PLAUSIBLE_CLICKHOUSE_PASSWORD }}"
-        clickhouseURL: "http://clickhouse:{{ .PLAUSIBLE_PASSWORD }}@plausible-analytics-clickhouse.tools.svc.cluster.local:8123/plausible_events_db"
+        ingress:
+          hosts:
+          - "{{ printf \"plausible.%s\" .TOP_LEVEL_DOMAIN }}"
+        # postgresql.auth.password: "{{ .PLAUSIBLE_PASSWORD }}"
+        # clickhouse.auth.password: "{{ .PLAUSIBLE_PASSWORD }}"
+        # # databaseURL: "{{ printf \"postgresql://plausible:%s@plausible-analytics-postgresql.tools.svc.cluster.local:5432/plausible\" .PLAUSIBLE_PASSWORD }}"
+        # clickhouseDatabaseURL: "{{ printf \"http://clickhouse:%s@plausible-analytics-clickhouse.tools.svc.cluster.local:8123/plausible_events_db\" .PLAUSIBLE_PASSWORD }}"
+
 
 
 
