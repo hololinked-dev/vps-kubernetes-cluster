@@ -16,7 +16,7 @@ if [ "$1" = "docker" ]; then
   sudo apt-get update
 
   # Install docker packages:
-  sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
   # cri-dockerd installation as docker still does not support CRI natively:
   sudo apt-get install -y git golang-go
@@ -63,8 +63,8 @@ elif [ "$1" = "mailcow" ]; then
   git clone https://github.com/mailcow/mailcow-dockerized
   cd /opt/mailcow-dockerized/
   sudo ./generate_config.sh
-  sudo docker-compose pull
-  sudo docker-compose up -d
+  sudo docker compose pull
+  sudo docker compose up -d
   echo "Mailcow installation complete. Make sure to add DNS records as specified here: https://docs.mailcow.email/getstarted/prerequisite-dns/#the-minimal-dns-configuration"
   cd ~/
 
