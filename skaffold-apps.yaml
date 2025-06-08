@@ -129,7 +129,7 @@ deploy:
       namespace: simulators
       valuesFiles:
         - cluster/manifests/helm/ingress/values.yaml
-        - cluster/manifests/helm/ingress-custom-routes/values-simulators.yaml
+        - apps/ingress-custom-routes/values-simulators.yaml
       setValues:
         nameOverride: simulators-ingress
 
@@ -147,7 +147,7 @@ deploy:
       namespace: control-panel
       valuesFiles:
         - cluster/manifests/helm/ingress/values.yaml
-        - cluster/manifests/helm/ingress-custom-routes/values-control-panel.yaml
+        - apps/ingress-custom-routes/values-control-panel.yaml
       setValues:
         nameOverride: control-panel-ingress
 
@@ -184,7 +184,7 @@ deploy:
       namespace: website
       valuesFiles:
         - cluster/manifests/helm/ingress/values.yaml
-        - cluster/manifests/helm/ingress-custom-routes/values-website.yaml
+        - apps/ingress-custom-routes/values-website.yaml
       setValues:
         nameOverride: website-ingress
 
@@ -193,16 +193,36 @@ deploy:
 apiVersion: skaffold/v4beta13
 kind: Config
 metadata:
-  name: staging-websites
+  name: staging-python-docs
 deploy:
   helm:
     releases:
-    - name: docs
+    - name: staging-python-docs
       chartPath: cluster/manifests/helm/apps
-      namespace: website
+      namespace: staging
       createNamespace: true
       setValues:
-        nameOverride: docs
+        nameOverride: staging-python-docs
         image:
-          repository: ghcr.io/hololinked-dev/docs
+          repository: ghcr.io/hololinked-dev/docs-v2
           tag: main
+          ports:
+            containerPort: 8000
+
+
+---
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: staging-apps-ingress
+deploy:
+  helm:
+    releases:
+    - name: staging-apps-ingress
+      chartPath: cluster/manifests/helm/ingress
+      namespace: staging
+      valuesFiles:
+        - cluster/manifests/helm/ingress/values.yaml
+        - apps/ingress-custom-routes/values-staging-apps.yaml
+      setValues:
+        nameOverride: staging-apps-ingress

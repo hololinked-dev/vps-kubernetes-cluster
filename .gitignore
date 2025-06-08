@@ -1,5 +1,4 @@
 **/.env
 **/cluster-created.txt
 **/skaffold.env
-apps/*
 **/admin.conf

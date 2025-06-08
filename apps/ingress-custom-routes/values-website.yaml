@@ -12,8 +12,8 @@ rules:
     paths:
       - path: /
         pathType: Prefix
-        backend:
+        backend: 
           service:
-            name: frontend
+            name: python-docs
             port:
               number: 80
