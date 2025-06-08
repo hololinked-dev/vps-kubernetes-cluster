@@ -33,8 +33,7 @@ if [ "$1" = "docker" ]; then
   # Test Docker installation:
   sudo docker run hello-world
 
-
-else if [ "$1" = "kubernetes" ]; then
+elif [ "$1" = "kubernetes" ]; then
 
   # Kubernetes installation with kubeadm:
   sudo apt-get update
@@ -56,7 +55,7 @@ else if [ "$1" = "kubernetes" ]; then
   sudo dpkg -i k9s_linux_amd64.deb
   rm k9s_linux_amd64.deb
 
-else if [ "$1" = "mailcow" ]; then
+elif [ "$1" = "mailcow" ]; then
 
   # Mailcow installation:
   sudo apt-get update
@@ -69,4 +68,7 @@ else if [ "$1" = "mailcow" ]; then
   echo "Mailcow installation complete. Make sure to add DNS records as specified here: https://docs.mailcow.email/getstarted/prerequisite-dns/#the-minimal-dns-configuration"
   cd ~/
 
+else
+  echo "Usage: $0 {docker|kubernetes|mailcow}"
+  exit 1
 fi
