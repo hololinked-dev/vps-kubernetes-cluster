@@ -30,6 +30,7 @@ ADMIN_EMAIL=<your admin email >
 To install docker and kubernetes:
 
 ```bash
+cd cluster
 chmod +x install.sh
 ./install.sh docker
 ./install.sh kubernetes
@@ -93,8 +94,8 @@ Essentially,
 1. submodule this repository into your project
 2. create a `skaffold.yaml` file in your project root
 3. Use the helm charts:
-    - `cluster/manifests/helm/apps` for your app
-    - `cluster/manifests/helm/ingress` for an ingress
+    - `cluster/manifests/helm/apps` for your app (specify `image.repository`, `image.tag`, env variables etc.)
+    - `cluster/manifests/helm/ingress` for an ingress (paths `hosts`, `tls` etc.)
 4. If you need an ingress controller apart from the public facing load balancer, you could change the ingress class name in the `skaffold.yaml` file. 
 5. Integrate skaffold in your pipeline and do `skaffold build` for building the images and `skaffold deploy` for deploying them.
 
