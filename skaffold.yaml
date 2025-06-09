@@ -1,7 +1,7 @@
 apiVersion: skaffold/v4beta13
 kind: Config
 metadata:
-  name: external-IP
+  name: external-load-balancer
 deploy:
   # dont forget to export the kube context
   helm:
