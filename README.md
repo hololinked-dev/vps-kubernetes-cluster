@@ -8,7 +8,7 @@ The following components can be installed:
 - kubernetes dashboard
 - letsencrypt for SSL certificates
 - plausible analytics (with databases)
-- email server (mailcow)
+- email server (mailcow) (outside kubernetes - intended to be used in a separate node/machine)
 - authentication manager (keycloak) (TODO)
 - database (postgres or mongo) (TODO)
 - docker registry (harbor) (TODO)
@@ -26,10 +26,6 @@ MAIN_NODE_IP=<your vps ip>
 MAIN_NODE_SSH_PORT=<your vps ssh port>
 TOP_LEVEL_DOMAIN=<your domain example.com>
 ADMIN_EMAIL=<your admin email >
-PLAUSIBLE_PASSWORD=<your plausible password>
-MAILCOW_ADMIN_PASSWORD=<your mailcow admin password>
-KEYCLOAK_ADMIN_PASSWORD=<your keycloak admin password>
-POSTGRES_PASSWORD=<your postgres password>
 ```
 
 To install docker and kubernetes:
@@ -72,6 +68,15 @@ skaffold run
 kubeadm token create --print-join-command
 ```
 and run the command on the new node to join it to the cluster.
+
+## Installing Specific Components
+
+| Component                | Installation Command                         | Notes                                        |
+|--------------------------|----------------------------------------------|----------------------------------------------|
+| External Load Balancer   | `skaffold run --module external-IP`          |                                              |
+| Kubernetes Dashboard     | `skaffold run --module kubernetes-dashboard` |                                              |
+| SSL (Let's Encrypt)      | `skaffold run --module cert-manager`         |                                              |
+| Plausible Analytics      | `skaffold run --module plausible-analytics`  | Not fully ready yet, does not work correctly |
 
 ## Nodes Setup
 

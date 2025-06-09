@@ -30,7 +30,7 @@ deploy:
 apiVersion: skaffold/v4beta13
 kind: Config
 metadata:
-  name: domain-tools
+  name: cert-manager
 deploy:
   # dont forget to export the kube context
   helm:
