@@ -18,7 +18,7 @@ deploy:
             containerPort: 5000
         env:
         - name: hostname
-          value: examples-new.hololinked.dev
+          value: examples.hololinked.dev
         - name: ssl_used
           value: "true"
   
@@ -44,7 +44,7 @@ deploy:
             containerPort: 5000
         env:
         - name: hostname
-          value: examples-new.hololinked.dev
+          value: examples.hololinked.dev
         - name: ssl_used
           value: "true"
 
@@ -70,7 +70,7 @@ deploy:
             containerPort: 3000
         env:
         - name: HOSTNAME
-          value: external-examples-new.hololinked.dev
+          value: external-examples.hololinked.dev
 
 
 ---
@@ -94,7 +94,7 @@ deploy:
             containerPort: 3000
         env:
         - name: HOSTNAME
-          value: external-examples-new.hololinked.dev
+          value: external-examples.hololinked.dev
       
 
 ---

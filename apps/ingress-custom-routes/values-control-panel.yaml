@@ -3,11 +3,11 @@ annotations:
  
 tls:
   - hosts:
-    - control-panel-new.hololinked.dev
-    secretName: control-panel-new-hololinked-tls
+    - control-panel.hololinked.dev
+    secretName: control-panel-hololinked-tls
 
 rules:
-- host: control-panel-new.hololinked.dev
+- host: control-panel.hololinked.dev
   http:
     paths:
       - path: /
@@ -17,7 +17,7 @@ rules:
             name: control-panel
             port:
               number: 80
-- host: control-panel-new.hololinked.net
+- host: no-ssl.control-panel.hololinked.net
   http:
     paths:
       - path: /

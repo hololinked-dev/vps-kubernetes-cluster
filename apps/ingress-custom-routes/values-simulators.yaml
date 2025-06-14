@@ -3,12 +3,12 @@ annotations:
  
 tls:
   - hosts:
-    - examples-new.hololinked.dev
-    - external-examples-new.hololinked.dev
-    secretName: examples-new-hololinked-dev-tls
+    - examples.hololinked.dev
+    - external-examples.hololinked.dev
+    secretName: examples-hololinked-dev-tls
 
 rules:
-- host: examples-new.hololinked.dev
+- host: examples.hololinked.dev
   http:
     paths:
       - path: /simulations/oscilloscope
@@ -26,7 +26,7 @@ rules:
             port:
               number: 80
 
-- host: external-examples-new.hololinked.dev
+- host: external-examples.hololinked.dev
   http:
     paths:
       - path: /advanced-coffee-machine
