@@ -158,4 +158,24 @@ deploy:
           cert-manager\.io/cluster-issuer: letsencrypt-test
 
 
+---
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: postgresql
+deploy:
+  helm:
+    releases:
+    - name: postgresql
+      remoteChart: oci://registry-1.docker.io/bitnamicharts/postgresql
+      version: 16.7.4
+      namespace: tools
+      createNamespace: true
+      setValues:
+        nameOverride: postgresql
+        primary.persistence.enabled: false
+      setValueTemplates:
+        auth.username: "{{ .POSTGRESQL_USERNAME }}"
+        auth.password: "{{ .POSTGRESQL_PASSWORD }}"
+       
        

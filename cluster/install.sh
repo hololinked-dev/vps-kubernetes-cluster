@@ -54,6 +54,8 @@ elif [ "$1" = "kubernetes" ]; then
   # update version number when new release is available - https://github.com/derailed/k9s/releases
   sudo dpkg -i k9s_linux_amd64.deb
   rm k9s_linux_amd64.deb
+  sudo apt-get -y install socat # port forwarding
+
 
 elif [ "$1" = "mailcow" ]; then
 
