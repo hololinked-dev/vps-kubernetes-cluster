@@ -56,6 +56,8 @@ elif [ "$1" = "kubernetes" ]; then
   rm k9s_linux_amd64.deb
   sudo apt-get -y install socat # port forwarding
 
+  # init
+  sudo kubeadm init --cri-socket unix:///run/cri-dockerd.sock --pod-network-cidr=192.168.0.0/16
 
 elif [ "$1" = "mailcow" ]; then
 
